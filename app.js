@@ -39,10 +39,12 @@ function initMap() {
     });
 
     map = L.map('map', { zoomControl: false, layers: [googleHybrid] }).setView(MAP_CENTER, MAP_ZOOM);
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
-
-    const baseMaps = { "Google Híbrido": googleHybrid, "Google Satélite": googleSat };
-    L.control.layers(baseMaps, null, { position: 'bottomleft' }).addTo(map);
+    
+    if (window.innerWidth > 768) {
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        const baseMaps = { "Google Híbrido": googleHybrid, "Google Satélite": googleSat };
+        L.control.layers(baseMaps, null, { position: 'bottomleft' }).addTo(map);
+    }
 
     markersLayer.addTo(map);
     renderMarkers();
@@ -77,17 +79,17 @@ function renderMarkers() {
 
         const marker = L.marker([cliente.lat, cliente.lng], { icon: customIcon });
         const popupContent = `
-            <div class="custom-popup" style="font-family: 'Inter', sans-serif; min-width: 220px; max-width: 250px;">
+            <div class="custom-popup" style="font-family: 'Inter', sans-serif; min-width: 220px; max-width: 260px;">
                 <div style="width: 100%; height: 120px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative;">
                     <img src="${cliente.foto}" style="width: 100%; height: 100%; object-fit: cover;" alt="Fachada del Local">
                     ${isRisk ? '<div style="position: absolute; top: 5px; right: 5px; background: #EF4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">¡ALERTA!</div>' : ''}
                 </div>
-                <h4 style="margin: 0 0 4px 0; color: #F8FAFC; font-size: 15px;">${cliente.nombre}</h4>
-                <p style="margin: 0; font-size: 12px; color: #94A3B8;">📍 ${cliente.ciudad} &nbsp;&nbsp;|&nbsp;&nbsp; 📦 Vol: ${cliente.volumen}</p>
+                <h4 style="margin: 0 0 4px 0; color: #F8FAFC; font-size: 14px;">${cliente.nombre}</h4>
+                <p style="margin: 0; font-size: 11px; color: #94A3B8;">📍 ${cliente.ciudad} &nbsp;&nbsp;|&nbsp;&nbsp; 📦 Vol: ${cliente.volumen}</p>
                 <hr style="margin: 10px 0; border: 0; border-top: 1px solid #334155;">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <p style="margin: 0; font-size: 12px;"><strong>Estado:</strong><br/> ${cliente.visitado ? '<span style="color:#10B981;">✓ Visitado hoy</span>' : '<span style="color:#EF4444;">✗ Pendiente</span>'}</p>
-                    <p style="margin: 0; font-size: 12px; text-align: right;"><strong>Riesgo Quiebre:</strong><br/> ${cliente.riesgoQuiebre ? '<span style="color:#EF4444; font-weight:bold;">ALTO</span>' : 'Bajo'}</p>
+                    <p style="margin: 0; font-size: 11px;"><strong>Estado:</strong><br/> ${cliente.visitado ? '<span style="color:#10B981;">✓ Visitado</span>' : '<span style="color:#EF4444;">✗ Pendiente</span>'}</p>
+                    <p style="margin: 0; font-size: 11px; text-align: right;"><strong>Riesgo Quiebre:</strong><br/> ${cliente.riesgoQuiebre ? '<span style="color:#EF4444; font-weight:bold;">ALTO</span>' : 'Bajo'}</p>
                 </div>
             </div>
         `;
@@ -115,17 +117,18 @@ function initMiniChart() {
         type: 'bar',
         data: {
             labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'],
-            datasets: [{ label: 'Avance Ruta Semanal', data: [100, 95, 80, 45, 0], backgroundColor: '#3B82F6', borderRadius: 4 }]
+            datasets: [{ label: 'Avance Semanal', data: [100, 95, 80, 45, 0], backgroundColor: '#3B82F6', borderRadius: 4 }]
         },
         options: {
             responsive: true, maintainAspectRatio: false,
-            scales: { y: { display: false, max: 100 }, x: { grid: { display: false } } },
+            scales: { y: { display: false, max: 100 }, x: { grid: { display: false }, ticks: { font: { size: 10 } } } },
             plugins: { legend: { display: false } }
         }
     });
 }
 
 function simularGeocerca() {
+    closeMobileMenu();
     const target = clientes.find(c => c.nombre === "Distribuidora El Leo");
     const alertBox = document.getElementById('geofence-alert');
     map.flyTo([target.lat, target.lng], 16, { animate: true, duration: 1.5 });
@@ -144,29 +147,34 @@ function simularGeocerca() {
 }
 
 function simularBalanceoRutas() {
+    closeMobileMenu();
     const routeClients = [
-        clientes.find(c => c.nombre === "Distribuidora La Torre"), // Chillán
-        clientes.find(c => c.nombre === "Distribuidora El Leo"), // Chillán Viejo
-        clientes.find(c => c.nombre === "Mayorista 10"), // Cabrero
-        clientes.find(c => c.nombre === "Distribuidora RABIE"), // Concepción
-        clientes.find(c => c.nombre === "Mayorista Ganga") // Talcahuano
+        clientes.find(c => c.nombre === "Distribuidora La Torre"),
+        clientes.find(c => c.nombre === "Distribuidora El Leo"),
+        clientes.find(c => c.nombre === "Mayorista 10"),
+        clientes.find(c => c.nombre === "Distribuidora RABIE"),
+        clientes.find(c => c.nombre === "Mayorista Ganga")
     ];
 
     const latlngs = routeClients.map(c => [c.lat, c.lng]);
-
     if(routeLine) map.removeLayer(routeLine);
-
-    routeLine = L.polyline(latlngs, {
-        color: '#3B82F6',
-        weight: 5,
-        opacity: 0.8,
-        dashArray: '10, 10',
-        lineJoin: 'round'
-    }).addTo(map);
-
-    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+    routeLine = L.polyline(latlngs, { color: '#3B82F6', weight: 5, opacity: 0.8, dashArray: '10, 10', lineJoin: 'round' }).addTo(map);
+    
+    // Ajustar padding en mobile vs desktop
+    const padding = window.innerWidth < 768 ? [20, 20] : [50, 50];
+    map.fitBounds(routeLine.getBounds(), { padding: padding });
 
     document.getElementById('route-panel').classList.remove('hidden');
+}
+
+// Lógica Menú Móvil
+function toggleMobileMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('mobile-overlay').classList.toggle('active');
+}
+function closeMobileMenu() {
+    document.getElementById('sidebar').classList.remove('active');
+    document.getElementById('mobile-overlay').classList.remove('active');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -181,4 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if(routeLine) map.removeLayer(routeLine);
         map.flyTo(MAP_CENTER, MAP_ZOOM, { animate: true, duration: 1 });
     });
+
+    // Mobile Listeners
+    document.getElementById('mobile-toggle').addEventListener('click', toggleMobileMenu);
+    document.getElementById('mobile-close').addEventListener('click', closeMobileMenu);
+    document.getElementById('mobile-overlay').addEventListener('click', closeMobileMenu);
 });
