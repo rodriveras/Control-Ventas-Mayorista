@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GeoConecta - Control Operativo</title>
+    <title>GeoConecta - Supervisor Móvil</title>
+    
+    <!-- Meta tags for PWA / Mobile App feel -->
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,113 +19,132 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="app-container">
-        
-        <!-- Botón Móvil Flotante (Hamburger) -->
-        <button id="mobile-toggle" class="mobile-toggle-btn">
-            <i class="fa-solid fa-bars"></i>
-        </button>
+    
+    <!-- Área Principal del Mapa (Fondo) -->
+    <div id="map"></div>
 
-        <!-- Sidebar Panel (Panel de Control) -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <h2>GeoConecta</h2>
-                </div>
-                <button id="mobile-close" class="mobile-close-btn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
+    <!-- Barra de Búsqueda Superior Flotante -->
+    <header class="top-bar">
+        <button id="btn-menu" class="icon-btn"><i class="fa-solid fa-bars"></i></button>
+        <div class="search-input">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Buscar cliente o zona...</span>
+        </div>
+        <button class="icon-btn profile"><i class="fa-solid fa-circle-user"></i></button>
+    </header>
 
-            <div class="sidebar-scrollable">
-                <p class="subtitle">Centro de Control - Ñuble/Biobío</p>
-                <div class="kpi-panel">
-                    <div class="kpi-grid">
-                        <div class="kpi-card">
-                            <span class="kpi-title">Cobertura del Día</span>
-                            <span class="kpi-value" id="kpi-compliance">--%</span>
-                            <div class="progress-bar"><div class="progress" style="width: 0%;"></div></div>
-                        </div>
-                        <div class="kpi-card alert-card">
-                            <span class="kpi-title">Riesgos de Quiebre</span>
-                            <span class="kpi-value" id="kpi-inactive">--</span>
-                            <span class="kpi-sub">Acción Inmediata Requerida</span>
-                        </div>
-                    </div>
-                </div>
+    <!-- Menú Lateral (Drawer) -->
+    <div id="lateral-menu" class="drawer">
+        <div class="drawer-header">
+            <h2>GeoConecta</h2>
+            <button id="btn-close-menu" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-content">
+            <h3>Filtros de Mapa</h3>
+            <label class="filter-option">
+                <input type="checkbox" id="filter-distribuidoras" checked>
+                <span class="filter-color color-distribuidora"></span> Distribuidoras
+            </label>
+            <label class="filter-option">
+                <input type="checkbox" id="filter-supermercados" checked>
+                <span class="filter-color color-supermercado"></span> Supermercados
+            </label>
 
-                <div class="filters">
-                    <h3>Filtros de Mapa</h3>
-                    <label class="filter-option">
-                        <input type="checkbox" id="filter-distribuidoras" checked>
-                        <span class="filter-color color-distribuidora"></span> Distribuidoras
-                    </label>
-                    <label class="filter-option">
-                        <input type="checkbox" id="filter-supermercados" checked>
-                        <span class="filter-color color-supermercado"></span> Supermercados
-                    </label>
-                    <div class="legend-info">
-                        <small><i class="fa-solid fa-circle"></i> Tamaño = Volumen</small><br>
-                        <small><i class="fa-regular fa-circle-dot alert-text"></i> Parpadeo = Riesgo Quiebre</small>
-                    </div>
-                </div>
-
-                <div class="mini-chart-container">
-                    <canvas id="mini-chart-cobertura"></canvas>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Área Principal del Mapa -->
-        <main class="map-container">
-            <div id="map"></div>
-            
-            <!-- Panel de Ruta (Balanceo) -->
-            <div id="route-panel" class="route-panel hidden">
-                <div class="route-header">
-                    <h3><i class="fa-solid fa-route"></i> Ruta Óptima</h3>
-                    <button id="btn-close-route" class="btn-close-small"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div class="route-summary">
-                    <div class="route-time">1 h 45 min</div>
-                    <div class="route-distance">115 km &nbsp;&bull;&nbsp; Tráfico Fluido</div>
-                </div>
-                <ul class="route-steps">
-                    <li><span class="step-icon origin">A</span><div class="step-details"><strong>Dist. La Torre</strong><span>Chillán</span></div></li>
-                    <li class="route-line-v"></li>
-                    <li><span class="step-icon waypoint"></span><div class="step-details"><strong>Dist. El Leo</strong><span>Chillán Viejo</span></div></li>
-                    <li class="route-line-v"></li>
-                    <li><span class="step-icon waypoint"></span><div class="step-details"><strong>Mayorista 10</strong><span>Cabrero</span></div></li>
-                    <li class="route-line-v"></li>
-                    <li><span class="step-icon waypoint"></span><div class="step-details"><strong>Dist. RABIE</strong><span>Concepción</span></div></li>
-                    <li class="route-line-v"></li>
-                    <li><span class="step-icon destination">B</span><div class="step-details"><strong>Mayorista Ganga</strong><span>Talcahuano</span></div></li>
-                </ul>
-                <button class="btn-start-route"><i class="fa-solid fa-location-arrow"></i> Enviar a Preventista</button>
+            <div class="legend-info">
+                <h4>Simbología</h4>
+                <p><i class="fa-solid fa-circle"></i> Tamaño de círculo = Volumen</p>
+                <p><i class="fa-regular fa-circle-dot alert-text"></i> Parpadeo = Riesgo Quiebre</p>
             </div>
             
-            <!-- Controles Flotantes en el Mapa -->
-            <div class="map-toolbar">
-                <button id="btn-balanceo" class="btn-toolbar" title="Balanceo Territorial">
-                    <i class="fa-solid fa-route"></i> <span class="toolbar-text">Balanceo</span>
-                </button>
-                <button id="btn-geocerca" class="btn-toolbar" title="Auditar Check-in">
-                    <i class="fa-solid fa-satellite-dish"></i> <span class="toolbar-text">Auditar</span>
-                </button>
-            </div>
-            
-            <!-- Alerta Flotante Geocerca -->
-            <div id="geofence-alert" class="floating-alert hidden">
-                <i class="fa-solid fa-user-check"></i>
-                <div class="alert-content">
-                    <h4>Check-in Auditado</h4>
-                    <p><strong id="geofence-client">...</strong></p>
-                </div>
-            </div>
-        </main>
-        
-        <!-- Overlay oscuro para menú móvil -->
-        <div id="mobile-overlay" class="mobile-overlay"></div>
+            <button id="btn-geocerca" class="btn-primary mt-auto">
+                <i class="fa-solid fa-satellite-dish"></i> Simular Check-in
+            </button>
+        </div>
     </div>
+    <div id="overlay-menu" class="overlay"></div>
+
+    <!-- Controles flotantes sobre el mapa -->
+    <div class="map-fab-container">
+        <button id="btn-location" class="fab-btn"><i class="fa-solid fa-crosshairs"></i></button>
+    </div>
+
+    <!-- Bottom Sheet: KPIs (Desplegable desde abajo) -->
+    <div id="sheet-kpis" class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3>Resumen Operativo</h3>
+            <button class="btn-close-sheet"><i class="fa-solid fa-chevron-down"></i></button>
+        </div>
+        <div class="sheet-content">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-title">Cobertura</span>
+                    <span class="kpi-value" id="kpi-compliance">--%</span>
+                    <div class="progress-bar"><div class="progress" style="width: 0%;"></div></div>
+                </div>
+                <div class="kpi-card alert-card">
+                    <span class="kpi-title">Riesgo Quiebre</span>
+                    <span class="kpi-value" id="kpi-inactive">--</span>
+                    <span class="kpi-sub">Acción requerida</span>
+                </div>
+            </div>
+            <div class="mini-chart-container">
+                <canvas id="mini-chart-cobertura"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Sheet: Ruta Óptima -->
+    <div id="sheet-route" class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h3><i class="fa-solid fa-route" style="color:var(--secondary-blue);"></i> Ruta Sugerida</h3>
+            <button class="btn-close-sheet"><i class="fa-solid fa-chevron-down"></i></button>
+        </div>
+        <div class="sheet-content route-content">
+            <div class="route-summary">
+                <div class="route-time">1 h 45 min</div>
+                <div class="route-distance">115 km &bull; Tráfico Fluido</div>
+            </div>
+            <ul class="route-steps">
+                <li><span class="step-icon origin">A</span><div class="step-details"><strong>Dist. La Torre</strong><span>Chillán</span></div></li>
+                <li class="route-line-v"></li>
+                <li><span class="step-icon waypoint"></span><div class="step-details"><strong>Dist. El Leo</strong><span>Chillán Viejo</span></div></li>
+                <li class="route-line-v"></li>
+                <li><span class="step-icon waypoint"></span><div class="step-details"><strong>Mayorista 10</strong><span>Cabrero</span></div></li>
+                <li class="route-line-v"></li>
+                <li><span class="step-icon waypoint"></span><div class="step-details"><strong>Dist. RABIE</strong><span>Concepción</span></div></li>
+                <li class="route-line-v"></li>
+                <li><span class="step-icon destination">B</span><div class="step-details"><strong>Mayorista Ganga</strong><span>Talcahuano</span></div></li>
+            </ul>
+            <button class="btn-primary" style="margin-top: 15px;"><i class="fa-solid fa-paper-plane"></i> Enviar a Preventista</button>
+        </div>
+    </div>
+
+    <!-- Alerta Flotante Geocerca -->
+    <div id="geofence-alert" class="floating-alert hidden">
+        <i class="fa-solid fa-user-check"></i>
+        <div class="alert-content">
+            <h4>Check-in Auditado</h4>
+            <p><strong id="geofence-client">...</strong></p>
+        </div>
+    </div>
+
+    <!-- Navegación Inferior (Bottom Nav) -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-target="map">
+            <i class="fa-solid fa-map"></i>
+            <span>Mapa</span>
+        </button>
+        <button class="nav-item" data-target="sheet-kpis">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Métricas</span>
+        </button>
+        <button class="nav-item" data-target="sheet-route" id="nav-btn-route">
+            <i class="fa-solid fa-route"></i>
+            <span>Rutas</span>
+        </button>
+    </nav>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="app.js"></script>
