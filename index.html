@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoConecta - Control Operativo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Sidebar Panel -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <h2>GeoConecta</h2>
+                </div>
+                <p class="subtitle">Centro de Control - Ñuble/Biobío</p>
+            </div>
+
+            <div class="kpi-panel">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-title">Cobertura del Día</span>
+                        <span class="kpi-value" id="kpi-compliance">--%</span>
+                        <div class="progress-bar"><div class="progress" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="kpi-card alert-card">
+                        <span class="kpi-title">Riesgos de Quiebre</span>
+                        <span class="kpi-value" id="kpi-inactive">--</span>
+                        <span class="kpi-sub">Acción Inmediata Requerida</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <h3>Visualización Operativa</h3>
+                <label class="filter-option">
+                    <input type="checkbox" id="filter-distribuidoras" checked>
+                    <span class="filter-color color-distribuidora"></span> Distribuidoras Mayoristas
+                </label>
+                <label class="filter-option">
+                    <input type="checkbox" id="filter-supermercados" checked>
+                    <span class="filter-color color-supermercado"></span> Supermercados
+                </label>
+                <div class="legend-info">
+                    <small><i class="fa-solid fa-circle" style="font-size: 8px;"></i> El tamaño indica volumen de compra</small><br>
+                    <small><i class="fa-regular fa-circle-dot" style="color:red;"></i> Parpadeo indica riesgo de quiebre</small>
+                </div>
+            </div>
+
+            <div class="mini-chart-container">
+                <canvas id="mini-chart-cobertura"></canvas>
+            </div>
+        </aside>
+
+        <!-- Main Map Area -->
+        <main class="map-container">
+            <div id="map"></div>
+            
+            <!-- Route Panel (Simulated Google Maps Routing) -->
+            <div id="route-panel" class="route-panel hidden">
+                <div class="route-header">
+                    <h3><i class="fa-solid fa-route"></i> Ruta Óptima (Balanceo)</h3>
+                    <button id="btn-close-route" class="btn-close-small"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="route-summary">
+                    <div class="route-time">1 h 45 min</div>
+                    <div class="route-distance">115 km &nbsp;&bull;&nbsp; Tráfico Fluido</div>
+                </div>
+                <ul class="route-steps">
+                    <li>
+                        <span class="step-icon origin">A</span>
+                        <div class="step-details">
+                            <strong>Distribuidora La Torre</strong>
+                            <span>Chillán</span>
+                        </div>
+                    </li>
+                    <li class="route-line-v"></li>
+                    <li>
+                        <span class="step-icon waypoint"></span>
+                        <div class="step-details">
+                            <strong>Distribuidora El Leo</strong>
+                            <span>Chillán Viejo</span>
+                        </div>
+                    </li>
+                    <li class="route-line-v"></li>
+                    <li>
+                        <span class="step-icon waypoint"></span>
+                        <div class="step-details">
+                            <strong>Mayorista 10</strong>
+                            <span>Cabrero</span>
+                        </div>
+                    </li>
+                    <li class="route-line-v"></li>
+                    <li>
+                        <span class="step-icon waypoint"></span>
+                        <div class="step-details">
+                            <strong>Distribuidora RABIE</strong>
+                            <span>Concepción</span>
+                        </div>
+                    </li>
+                    <li class="route-line-v"></li>
+                    <li>
+                        <span class="step-icon destination">B</span>
+                        <div class="step-details">
+                            <strong>Mayorista Ganga</strong>
+                            <span>Talcahuano</span>
+                        </div>
+                    </li>
+                </ul>
+                <button class="btn-start-route"><i class="fa-solid fa-location-arrow"></i> Aprobar y Enviar a Preventista</button>
+            </div>
+            
+            <!-- Map Controls / Toolbar -->
+            <div class="map-toolbar">
+                <button id="btn-balanceo" class="btn-toolbar" title="Balanceo Territorial">
+                    <i class="fa-solid fa-draw-polygon"></i> Balanceo y Rutas
+                </button>
+                <button id="btn-geocerca" class="btn-toolbar" title="Auditar Geocerca">
+                    <i class="fa-solid fa-satellite-dish"></i> Auditar Check-in
+                </button>
+            </div>
+            
+            <!-- Floating Alert for Geofence -->
+            <div id="geofence-alert" class="floating-alert hidden">
+                <i class="fa-solid fa-user-check"></i>
+                <div class="alert-content">
+                    <h4>Check-in Auditado</h4>
+                    <p>Preventista ingresó a <strong id="geofence-client">...</strong></p>
+                    <small>Tiempo estimado de gestión: 45 min</small>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="app.js"></script>
+</body>
+</html>
