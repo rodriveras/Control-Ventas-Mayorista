@@ -8,7 +8,6 @@
     --text-main: #F8FAFC; 
     --text-muted: #94A3B8; 
     --border-color: #334155; 
-    
     --color-supermercado: #38BDF8; 
     --color-distribuidora: #FBBF24; 
 }
@@ -25,80 +24,28 @@ body {
     position: relative;
 }
 
-/* Background Map */
 #map { 
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 1;
-    background-color: var(--bg-dark);
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1; background-color: var(--bg-dark);
 }
 
-/* -------------------------------------
-   TOP BAR (Google Maps Style)
-   ------------------------------------- */
 .top-bar {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    right: 16px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    background-color: var(--surface);
-    border-radius: 24px;
-    padding: 6px 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    gap: 12px;
+    position: absolute; top: 16px; left: 16px; right: 16px; z-index: 1000;
+    display: flex; align-items: center; background-color: var(--surface);
+    border-radius: 24px; padding: 6px 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.6); gap: 12px;
 }
-
-.icon-btn {
-    background: none;
-    border: none;
-    color: var(--text-main);
-    font-size: 20px;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.search-input {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-muted);
-    font-size: 15px;
-}
-
+.icon-btn { background: none; border: none; color: var(--text-main); font-size: 20px; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; }
+.search-input { flex-grow: 1; display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 15px; }
 .profile i { color: var(--secondary-blue); font-size: 24px;}
 
-/* -------------------------------------
-   DRAWER (Lateral Menu)
-   ------------------------------------- */
 .drawer {
-    position: fixed;
-    top: 0; left: -300px;
-    width: 280px; height: 100%;
-    background-color: var(--surface);
-    z-index: 2000;
+    position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+    background-color: var(--surface); z-index: 2000;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 5px 0 20px rgba(0,0,0,0.8);
+    display: flex; flex-direction: column; box-shadow: 5px 0 20px rgba(0,0,0,0.8);
 }
 .drawer.open { transform: translateX(300px); }
-
-.drawer-header {
-    padding: 24px 20px;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+.drawer-header { padding: 24px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
 .drawer-header h2 { font-size: 20px; color: var(--text-main); }
 .drawer-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto;}
 .drawer-content h3 { font-size: 14px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; }
@@ -116,99 +63,36 @@ body {
 
 .overlay {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.6); z-index: 1900;
-    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    background: rgba(0,0,0,0.6); z-index: 1900; opacity: 0; pointer-events: none; transition: opacity 0.3s;
 }
 .overlay.active { opacity: 1; pointer-events: auto; }
 
-/* -------------------------------------
-   MAP CONTROLS
-   ------------------------------------- */
-.map-fab-container {
-    position: absolute;
-    right: 16px;
-    bottom: 90px; /* Above bottom nav */
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.fab-btn {
-    width: 48px; height: 48px;
-    border-radius: 50%;
-    background-color: var(--surface);
-    color: var(--secondary-blue);
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    font-size: 20px;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer;
-}
+.map-fab-container { position: absolute; right: 16px; bottom: 90px; z-index: 1000; display: flex; flex-direction: column; gap: 12px; }
+.fab-btn { width: 48px; height: 48px; border-radius: 50%; background-color: var(--surface); color: var(--secondary-blue); border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-/* -------------------------------------
-   BOTTOM NAV
-   ------------------------------------- */
 .bottom-nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 70px;
-    background-color: var(--surface);
-    border-top: 1px solid var(--border-color);
-    z-index: 1500;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding-bottom: env(safe-area-inset-bottom);
+    position: fixed; bottom: 0; left: 0; right: 0; height: 70px;
+    background-color: var(--surface); border-top: 1px solid var(--border-color);
+    z-index: 1500; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom);
 }
-.nav-item {
-    background: none; border: none;
-    color: var(--text-muted);
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    font-size: 11px;
-    width: 70px;
-    cursor: pointer;
-    transition: color 0.2s;
-}
+.nav-item { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; width: 70px; cursor: pointer; transition: color 0.2s; }
 .nav-item i { font-size: 20px; }
 .nav-item.active { color: var(--secondary-blue); }
 
-/* -------------------------------------
-   BOTTOM SHEETS (KPIs & Rutas)
-   ------------------------------------- */
 .bottom-sheet {
-    position: fixed;
-    bottom: 70px; /* Above nav */
-    left: 0; right: 0;
-    background-color: var(--surface);
-    border-radius: 20px 20px 0 0;
-    z-index: 1400;
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-    transform: translateY(120%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
+    position: fixed; bottom: 70px; left: 0; right: 0; background-color: var(--surface);
+    border-radius: 20px 20px 0 0; z-index: 1400; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    transform: translateY(120%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 80vh; display: flex; flex-direction: column;
 }
 .bottom-sheet.open { transform: translateY(0); }
 
-.sheet-handle {
-    width: 40px; height: 4px;
-    background-color: var(--border-color);
-    border-radius: 2px;
-    margin: 12px auto;
-}
-
-.sheet-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 0 20px 16px;
-    border-bottom: 1px solid var(--border-color);
-}
+.sheet-handle { width: 40px; height: 4px; background-color: var(--border-color); border-radius: 2px; margin: 12px auto; }
+.sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px 16px; border-bottom: 1px solid var(--border-color); }
 .sheet-header h3 { font-size: 16px; }
 .btn-close-sheet { background: none; border: none; color: var(--text-muted); font-size: 18px; padding: 5px;}
-
 .sheet-content { padding: 20px; overflow-y: auto; flex-grow: 1; }
 
-/* KPI Grid in Sheet */
 .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;}
 .kpi-card { background-color: var(--bg-dark); padding: 16px; border-radius: 12px; border-left: 3px solid var(--secondary-blue); }
 .alert-card { border-left-color: var(--accent-red); }
@@ -220,7 +104,6 @@ body {
 .progress { height: 100%; background: var(--secondary-blue); }
 .mini-chart-container { height: 150px; }
 
-/* Route Sheet Content */
 .route-summary { padding-bottom: 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px;}
 .route-time { font-size: 24px; font-weight: bold; color: #10B981; }
 .route-distance { font-size: 13px; color: var(--text-muted); margin-top: 4px;}
@@ -235,13 +118,17 @@ body {
 .step-details strong { font-size: 14px; color: var(--text-main); }
 .step-details span { font-size: 12px; color: var(--text-muted); }
 
-/* Common Buttons */
 .btn-primary { width: 100%; padding: 14px; background-color: var(--secondary-blue); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;}
 
-/* Map Elements */
+/* Animations */
 @keyframes pulseRedDark { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.9); } 70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 .marker-risk { border-radius: 50%; animation: pulseRedDark 1.5s infinite; }
 
+/* Animated Route Path */
+@keyframes dashRoute { to { stroke-dashoffset: -100; } }
+.animated-route { animation: dashRoute 3s linear infinite; }
+
+/* Leaflet Overrides */
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { background-color: var(--surface) !important; color: var(--text-main) !important; box-shadow: 0 10px 25px rgba(0,0,0,0.8) !important; }
 .leaflet-container a.leaflet-popup-close-button { color: var(--text-main) !important; top: 10px !important; right: 10px !important; background: rgba(0,0,0,0.5); border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; padding: 0;}
 .leaflet-control-zoom { display: none !important; }

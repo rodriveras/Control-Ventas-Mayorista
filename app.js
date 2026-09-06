@@ -3,29 +3,28 @@ const MAP_CENTER = [-36.7, -72.6];
 const MAP_ZOOM = 9;
 const COLORS = { supermercado: '#38BDF8', distribuidora: '#FBBF24' };
 
-// Fotos de supermercados en Chile (Wikimedia) para darle mayor realismo
-const fotoJumbo = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Jumbo_Costanera_Center_2019.jpg/640px-Jumbo_Costanera_Center_2019.jpg"; 
-const fotoLider = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Hiper_L%C3%ADder_-_panoramio.jpg/640px-Hiper_L%C3%ADder_-_panoramio.jpg";
-const fotoUnimarc = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Supermercado_Unimarc_en_Punta_Arenas.jpg/640px-Supermercado_Unimarc_en_Punta_Arenas.jpg";
-const fotoSantaIsabel = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Santa_Isabel_logo.svg/640px-Santa_Isabel_logo.svg.png";
-
-// Fotos genéricas tipo bodega/mayorista chileno (Unsplash) para las distribuidoras locales
-const fotoMayorista1 = "https://images.unsplash.com/photo-1586528116311-ad8ed7c1590a?auto=format&fit=crop&w=300&q=80";
-const fotoMayorista2 = "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=300&q=80";
+// Usando LoremFlickr: un servicio hiper estable que no bloquea la carga local 
+// y busca fotos específicas de supermercados y tiendas.
+const fJumbo = "https://loremflickr.com/300/120/supermarket,exterior/all?lock=1"; 
+const fLider = "https://loremflickr.com/300/120/grocery,storefront/all?lock=2";
+const fUnimarc = "https://loremflickr.com/300/120/supermarket,facade/all?lock=3";
+const fSantaIsabel = "https://loremflickr.com/300/120/retail,store/all?lock=4";
+const fMercado = "https://loremflickr.com/300/120/market,building/all?lock=5";
+const fBodega = "https://loremflickr.com/300/120/warehouse,exterior/all?lock=6";
 
 const clientes = [
-    { id: 1, nombre: "Distribuidora La Torre", tipo: "distribuidora", lat: -36.602, lng: -72.098, visitado: false, volumen: 100, riesgoQuiebre: true, ciudad: "Chillán", foto: fotoMayorista1 },
-    { id: 2, nombre: "Distribuidora El Leo", tipo: "distribuidora", lat: -36.620, lng: -72.115, visitado: true, volumen: 85, riesgoQuiebre: false, ciudad: "Chillán Viejo", foto: fotoMayorista2 },
-    { id: 3, nombre: "Supermercado Jumbo", tipo: "supermercado", lat: -36.612, lng: -72.105, visitado: true, volumen: 60, riesgoQuiebre: false, ciudad: "Chillán", foto: fotoJumbo },
-    { id: 7, nombre: "Supermercado Lider", tipo: "supermercado", lat: -36.605, lng: -72.090, visitado: true, volumen: 55, riesgoQuiebre: false, ciudad: "Chillán", foto: fotoLider },
-    { id: 4, nombre: "Mayorista 10", tipo: "distribuidora", lat: -36.820, lng: -72.330, visitado: false, volumen: 75, riesgoQuiebre: true, ciudad: "Cabrero", foto: fotoMayorista1 },
-    { id: 5, nombre: "Supermercado Unimarc", tipo: "supermercado", lat: -37.470, lng: -72.350, visitado: false, volumen: 40, riesgoQuiebre: false, ciudad: "Los Ángeles", foto: fotoUnimarc },
-    { id: 6, nombre: "Central Mayorista", tipo: "distribuidora", lat: -37.475, lng: -72.340, visitado: true, volumen: 90, riesgoQuiebre: false, ciudad: "Los Ángeles", foto: fotoMayorista2 },
-    { id: 8, nombre: "Distribuidora RABIE", tipo: "distribuidora", lat: -36.826, lng: -73.050, visitado: true, volumen: 110, riesgoQuiebre: false, ciudad: "Concepción", foto: fotoMayorista1 },
-    { id: 9, nombre: "Supermercado Santa Isabel", tipo: "supermercado", lat: -36.821, lng: -73.045, visitado: false, volumen: 45, riesgoQuiebre: true, ciudad: "Concepción", foto: fotoSantaIsabel },
-    { id: 10, nombre: "Mayorista Ganga", tipo: "distribuidora", lat: -36.720, lng: -73.110, visitado: false, volumen: 80, riesgoQuiebre: true, ciudad: "Talcahuano", foto: fotoMayorista2 },
-    { id: 11, nombre: "Supermercado Versluys", tipo: "supermercado", lat: -36.840, lng: -73.105, visitado: true, volumen: 65, riesgoQuiebre: false, ciudad: "San Pedro de la Paz", foto: fotoMayorista1 },
-    { id: 12, nombre: "Alvi Supermercados", tipo: "distribuidora", lat: -36.780, lng: -73.070, visitado: true, volumen: 95, riesgoQuiebre: false, ciudad: "Hualpén", foto: fotoMayorista2 }
+    { id: 1, nombre: "Distribuidora La Torre", tipo: "distribuidora", lat: -36.602, lng: -72.098, visitado: false, volumen: 100, riesgoQuiebre: true, ciudad: "Chillán", foto: fMercado },
+    { id: 2, nombre: "Distribuidora El Leo", tipo: "distribuidora", lat: -36.620, lng: -72.115, visitado: true, volumen: 85, riesgoQuiebre: false, ciudad: "Chillán Viejo", foto: fMercado },
+    { id: 3, nombre: "Supermercado Jumbo", tipo: "supermercado", lat: -36.612, lng: -72.105, visitado: true, volumen: 60, riesgoQuiebre: false, ciudad: "Chillán", foto: fJumbo },
+    { id: 7, nombre: "Supermercado Lider", tipo: "supermercado", lat: -36.605, lng: -72.090, visitado: true, volumen: 55, riesgoQuiebre: false, ciudad: "Chillán", foto: fLider },
+    { id: 4, nombre: "Mayorista 10", tipo: "distribuidora", lat: -36.820, lng: -72.330, visitado: false, volumen: 75, riesgoQuiebre: true, ciudad: "Cabrero", foto: fBodega },
+    { id: 5, nombre: "Supermercado Unimarc", tipo: "supermercado", lat: -37.470, lng: -72.350, visitado: false, volumen: 40, riesgoQuiebre: false, ciudad: "Los Ángeles", foto: fUnimarc },
+    { id: 6, nombre: "Central Mayorista", tipo: "distribuidora", lat: -37.475, lng: -72.340, visitado: true, volumen: 90, riesgoQuiebre: false, ciudad: "Los Ángeles", foto: fBodega },
+    { id: 8, nombre: "Distribuidora RABIE", tipo: "distribuidora", lat: -36.826, lng: -73.050, visitado: true, volumen: 110, riesgoQuiebre: false, ciudad: "Concepción", foto: fBodega },
+    { id: 9, nombre: "Supermercado Santa Isabel", tipo: "supermercado", lat: -36.821, lng: -73.045, visitado: false, volumen: 45, riesgoQuiebre: true, ciudad: "Concepción", foto: fSantaIsabel },
+    { id: 10, nombre: "Mayorista Ganga", tipo: "distribuidora", lat: -36.720, lng: -73.110, visitado: false, volumen: 80, riesgoQuiebre: true, ciudad: "Talcahuano", foto: fBodega },
+    { id: 11, nombre: "Supermercado Versluys", tipo: "supermercado", lat: -36.840, lng: -73.105, visitado: true, volumen: 65, riesgoQuiebre: false, ciudad: "San Pedro de la Paz", foto: fMercado },
+    { id: 12, nombre: "Alvi Supermercados", tipo: "distribuidora", lat: -36.780, lng: -73.070, visitado: true, volumen: 95, riesgoQuiebre: false, ciudad: "Hualpén", foto: fBodega }
 ];
 
 let map, markersLayer = L.layerGroup(), routeLine = null;
@@ -61,11 +60,10 @@ function renderMarkers() {
 
         const marker = L.marker([cliente.lat, cliente.lng], { icon: customIcon });
         
-        // Ajustado object-fit para no distorsionar logos o fotos reales
         const popupContent = `
             <div style="font-family: 'Inter', sans-serif; min-width: 220px; max-width: 260px;">
-                <div style="width: 100%; height: 120px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background-color: #fff;">
-                    <img src="${cliente.foto}" style="width: 100%; height: 100%; object-fit: contain; padding: 2px;">
+                <div style="width: 100%; height: 120px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; background-color: #1E293B;">
+                    <img src="${cliente.foto}" style="width: 100%; height: 100%; object-fit: cover;">
                     ${isRisk ? '<div style="position: absolute; top: 5px; right: 5px; background: #EF4444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold;">¡ALERTA!</div>' : ''}
                 </div>
                 <h4 style="margin: 0 0 4px 0; font-size: 14px;">${cliente.nombre}</h4>
@@ -109,7 +107,6 @@ function initMiniChart() {
     });
 }
 
-// Mobile UI Logic 
 function toggleDrawer() {
     document.getElementById('lateral-menu').classList.toggle('open');
     document.getElementById('overlay-menu').classList.toggle('active');
@@ -118,16 +115,13 @@ function closeDrawer() {
     document.getElementById('lateral-menu').classList.remove('open');
     document.getElementById('overlay-menu').classList.remove('active');
 }
-
 function closeAllSheets() {
     document.querySelectorAll('.bottom-sheet').forEach(sheet => sheet.classList.remove('open'));
 }
-
 function openSheet(id) {
     closeAllSheets();
     document.getElementById(id).classList.add('open');
 }
-
 function activateNav(targetBtn) {
     document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
     targetBtn.classList.add('active');
@@ -160,10 +154,27 @@ function trazarRutaOptima() {
         clientes.find(c => c.nombre === "Distribuidora RABIE"),
         clientes.find(c => c.nombre === "Mayorista Ganga")
     ];
+
     const latlngs = routeClients.map(c => [c.lat, c.lng]);
-    if(routeLine) map.removeLayer(routeLine);
-    routeLine = L.polyline(latlngs, { color: '#3B82F6', weight: 5, opacity: 0.8, dashArray: '10,10', lineJoin: 'round' }).addTo(map);
-    map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+
+    if(routeLine) {
+        map.removeLayer(routeLine);
+        routeLine = null;
+    }
+    
+    routeLine = L.polyline(latlngs, {
+        color: '#10B981', 
+        weight: 6,
+        opacity: 0.9,
+        dashArray: '15, 15',
+        lineJoin: 'round',
+        className: 'animated-route'
+    }).addTo(map);
+
+    document.getElementById('route-time-text').textContent = "1 h 45 min";
+    document.getElementById('route-distance-text').textContent = "115 km • Tráfico Fluido";
+
+    map.fitBounds(routeLine.getBounds(), { paddingBottomRight: [50, 400], paddingTopLeft: [50, 50] });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
